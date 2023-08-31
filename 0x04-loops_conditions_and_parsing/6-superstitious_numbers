@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# This script displays numbers from 1 to 20 but on the 4th iteration, it displays
+# "bad luck from China" and on the 9th iteration, it displays "bad luck from Japan"
+# also, in the 17th iteration it displays "bad luck from Italy".
+# Only while and case statment must be used
+count=1
+while [[ $count -le 20 ]]
+do
+	echo $count
+	case $count in
+		"4")
+			echo "bad luck from China"
+			;;
+		"9")
+			echo "bad luck from Japan"
+			;;
+		"17")
+			echo "bad luck from Italy"
+			;;
+	esac
+	(( count++ ))
+done
