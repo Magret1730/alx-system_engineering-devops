@@ -2,11 +2,12 @@
 # script that displays the visitor IP along with the HTTP status code from the Apache log file
 # awk '{print ++counter, $1, $9}' counter=0 apache-access.log
 awk '{
-    occurrence[++counter] = $0
+    key = $1 " " $9
+    occurrences[key]++
 }
 END {
-    for (i = counter; i >= 1; i--) {
-        split(occurrence[i], parts)
-        print i, parts[1], parts[9]
+    for (key in occurrences) {
+        split(key, parts)
+        print occurrences[key], parts[1], parts[2]
     }
-}' counter=0 apache-access.log
+}' apache-access.log | sort -nr
