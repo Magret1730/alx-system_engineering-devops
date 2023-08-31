@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script diplays "Best School" 10 times using until loop
+counter=1
+until [[ counter -ge 11 ]]
+do
+	echo "Best School"
+	(( counter++ ))
+done
