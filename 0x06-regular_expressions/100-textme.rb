@@ -1,2 +1,2 @@
 #!/usr/bin/env ruby
-puts ARGV[0].scan(/\[[\w+]*\] \[[\w+]*\] \[\([\d\-:]*)]/).join(",")
+puts ARGV[0].scan(/\[from:([\w\s\+]+)\] \[to:([\w\s\+]+)\] \[flags:([^\]]+)\]/).map { |match| match.join(",") }.join(",")
