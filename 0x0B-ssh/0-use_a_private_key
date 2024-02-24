@@ -3,4 +3,26 @@
 # Bash script that uses ssh to connect to your server using the
 # private key ~/.ssh/school with the user ubuntu
 
-ssh -i ~/.ssh/school ubuntu@172.17.0.28
+# ssh -i ~/.ssh/school ubuntu@44.202.162.239
+
+#!/usr/bin/env bash
+
+PRIVATE_KEY=~/.ssh/school
+REMOTE_USER=ubuntu
+REMOTE_HOST=44.202.162.239
+
+# Check if the private key file exists
+if [ ! -f "$PRIVATE_KEY" ]; then
+    echo "Error: Private key file $PRIVATE_KEY not found."
+    exit 1
+fi
+
+# Check if the private key file has secure permissions
+if [ "$(stat -c '%a' "$PRIVATE_KEY")" != "600" ]; then
+    echo "Error: Insecure permissions on $PRIVATE_KEY. Set permissions to 600."
+    exit 1
+fi
+
+# Connect using ssh with the specified private key
+ssh -i "$PRIVATE_KEY" "$REMOTE_USER@$REMOTE_HOST"
+
