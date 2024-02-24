@@ -3,4 +3,8 @@
 # Bash script that uses ssh to connect to your server using the
 # private key ~/.ssh/school with the user ubuntu
 
-ssh -i ~/.ssh/school ubuntu@44.202.162.239
+PRIVATE_KEY="$HOME/.ssh/school"
+USER="ubuntu"
+REMOTE_HOST=100.25.177.26
+
+ssh -i "$PRIVATE_KEY" "$USER@$REMOTE_HOST"
