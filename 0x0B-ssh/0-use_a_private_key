@@ -4,4 +4,3 @@
 # private key ~/.ssh/school with the user ubuntu
 
 ssh -i ~/.ssh/school ubuntu@44.202.162.239
-
