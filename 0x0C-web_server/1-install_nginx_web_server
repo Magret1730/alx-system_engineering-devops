@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# A bash script that installs nginx on my web server that is listening on
+# port 80.
+
+# Update package list
+apt-get update
+
+# Install nginx
+apt-get -y install nginx
+
+# Configure nginx to listen on port 80
+sed -i 's/80 default_server/80 default_server/g' /etc/nginx/sites-available/default
+
+# Restart nginx without using systemctl
+/etc/init.d/nginx restart
+
+# # Create a default HTML page with the required content
+echo "Hello World!" > /var/www/html/index.html
