@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Configuring my Nginx server to have a custom 404 page that contains
+# the string Ceci n'est pas une page.
+
+# Update package list
+apt-get update
+
+# Install nginx
+apt-get -y install nginx
+
+# Define the path to the Nginx configuration file
+nginx_conf="/etc/nginx/sites-available/default"
+
+# Create a backup of the original Nginx configuration file
+cp "$nginx_conf" "$nginx_conf.backup"
+
+# Define the path to the custom 404 page
+custom_404_path="/usr/share/nginx/html/404.html"
+
+# Create the custom 404 page with the required string
+echo "Ceci n'est pas une page" | tee "$custom_404_path"
+
+# Add the custom 404 page configuration using sed
+sed -i "/server_name _;/a\\\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}" "$nginx_conf"
+
+# error_page 404 /404.html;
+#    location = /404.html {
+#        root /usr/share/nginx/html;
+#        internal;
+#    }
+
+# Restart Nginx without using systemctl
+/etc/init.d/nginx restart
