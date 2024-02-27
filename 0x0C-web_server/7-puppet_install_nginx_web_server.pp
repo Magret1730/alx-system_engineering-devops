@@ -1,45 +1,30 @@
-# 7-puppet_install_nginx_web_server.pp
+# Puppet script to install and configure Nginx server
 
-# Install Nginx package
-package { 'nginx':
-  ensure => installed,
+# Ensure the Nginx package is present
+package {'nginx':
+  ensure => 'present',
 }
 
-# Ensure Nginx service is running and enabled
-service { 'nginx':
-  ensure  => running,
-  enable  => true,
-  require => Package['nginx'],
+# Execute command to install Nginx
+exec {'install':
+  command  => 'sudo apt-get update ; sudo apt-get -y install nginx',
+  provider => shell,
 }
 
-# Configure Nginx server
-file { '/etc/nginx/sites-available/default':
-  ensure  => file,
-  content => template('nginx/default.erb'),
-  notify  => Service['nginx'],
+# Create a Hello World index page
+exec {'Hello_world':
+  command  => 'echo "Hello World!" | sudo tee /var/www/html/index.html',
+  provider => shell,
 }
 
-# Create custom 404 page
-file { '/usr/share/nginx/html/404.html':
-  ensure  => file,
-  content => 'Ceci n\'est pas une page',
+# Add a configuration for redirection in the Nginx default site
+exec {'configure_redirect':
+  command  => 'sudo sed -i "s/listen 80 default_server;/listen 80 default_server;\\n\\tlocation \/redirect_me {\\n\\t\\treturn 301 https:\/\/www.google.com\/\/;\\n\\t}/" /etc/nginx/sites-available/default',
+  provider => shell,
 }
 
-# Enable the default site
-file { '/etc/nginx/sites-enabled/default':
-  ensure => link,
-  target => '/etc/nginx/sites-available/default',
+# Restart Nginx to apply changes
+exec {'restart_nginx':
+  command  => 'sudo service nginx restart',
+  provider => shell,
 }
-
-# Redirect /redirect_me to the specified URL with a 301 status
-nginx::resource::location { '/redirect_me':
-  ensure    => present,
-  location  => '/redirect_me',
-  alias     => 'https://www.youtube.com/watch?v=QH2-TGUlwu4',
-  status    => '301',
-  server    => 'default',
-  require   => File['/etc/nginx/sites-available/default'],
-}
-
-# Notify Nginx service to restart when configuration changes
-Nginx::Resource::Location <| |> ~> Service['nginx']
