@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Configuring my Nginx server so that /redirect_me is redirecting to
+# another page
+
+# Update package list
+apt-get update
+
+# Install nginx
+apt-get -y install nginx
+
+# Define the path to the Nginx configuration file
+nginx_conf="/etc/nginx/sites-available/default"
+
+# Create a backup of the original Nginx configuration file
+cp "$nginx_conf" "$nginx_conf.backup"
+
+# Use sed to replace the location block for /redirect_me with the redirection configuration
+# sed -i '/location \/redirect_me {/,/}/ c\
+#	location /redirect_me {\
+#    	return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n}' "$nginx_conf"
+
+# sed -i '/location \/ {/a \
+#        location /redirect_me {\
+#        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\
+#        }' "$nginx_conf"
+
+sed -i '/server_name _;/a\\tlocation /redirect_me {\n            return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}' "$nginx_conf"
+
+
+# Restart Nginx without using systemctl
+/etc/init.d/nginx restart
