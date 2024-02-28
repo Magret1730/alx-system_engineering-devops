@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # bash script to debug web server
+# service apache2 status
 
-service apache2 status
 service apache2 start
