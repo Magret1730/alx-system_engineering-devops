@@ -1,4 +1,5 @@
 # Puppet script to automate the task of creating a custom HTTP header response
+include stdlib
 
 # Install Nginx
 class { 'nginx':
