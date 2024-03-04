@@ -18,5 +18,6 @@ backend webservers
 EOF
 
 # Make sure HAProxy can be managed via an init script
-sudo systemctl enable haproxy
-sudo systemctl restart haproxy
+sudo service haproxy restart
+# sudo systemctl enable haproxy
+# sudo systemctl restart haproxy
