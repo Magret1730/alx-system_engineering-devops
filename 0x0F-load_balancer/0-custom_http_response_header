@@ -7,29 +7,7 @@ sudo apt-get update
 # install nginx
 sudo apt-get -y install nginx
 
-# Define the path to the Nginx configuration file
-nginx_conf="/etc/nginx/sites-available/default"
-
-# Configure nginx to listen on port 80
-sudo sed -i 's/80 default_server/80 default_server/g' "$nginx_conf"
-
-# Use sed to replace the location block for /redirect_me with the redirection configuration
-sudo sed -i '/server_name _;/a\\tlocation /redirect_me {\n            return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}' "$nginx_conf"
-
-# Define the path to the custom 404 page
-custom_404_path="/usr/share/nginx/html/404.html"
-
-# Create the custom 404 page with the required string
-echo "Ceci n'est pas une page" | sudo tee "$custom_404_path"
-
-# Add the custom 404 page configuration using sed
-sudo sed -i "/server_name _;/a\\\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}" "$nginx_conf"
-
-# Create a default HTML page with the required content
-echo "Hello World!" | sudo tee /var/www/html/index.html
-
 # set custom header in nginx configuration file
-# echo "add_header X-Served-By \${HOSTNAME};" | sudo tee -a /etc/nginx/sites-available/default
 sudo sed -i "/server_name _;/a\ \ \ \ \ \ \ \ add_header X-Served-By ${hostname};" "$nginx_conf"
 
 # restart nginx
