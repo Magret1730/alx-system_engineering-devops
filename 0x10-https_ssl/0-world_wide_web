@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Bash script to domain zone so that the subdomain www points to my
+# load-balancer IP (lb-01)
+
+# Function to display subdomain information
+display_info() {
+    local domain="$1"
+    local subdomain="$2"
+    local record_type
+    record_type=$(dig +short -t A "$subdomain.$domain" | awk '{print (length > 0) ? "A" : "CNAME"}')
+    local destination
+    destination=$(dig +short "$subdomain.$domain")
+
+    echo "The subdomain $subdomain is a $record_type record and points to $destination"
+}
+
+domain="$1"
+subdomain="$2"
+
+if [ -z "$subdomain" ]; then
+    # Display information for default subdomains
+    display_info "$domain" "www"
+    display_info "$domain" "lb-01"
+    display_info "$domain" "web-01"
+    display_info "$domain" "web-02"
+else
+    # Display information for the specified subdomain
+    display_info "$domain" "$subdomain"
+fi
+
+
+# t@58f4f6b43b66:~/alx-system_engineering-devops/0x10-https_ssl# ./0-world_wide_web magret.tech
+# The subdomain www is a  record and points to 54.237.75.158
+# The subdomain lb-01 is a  record and points to 54.237.75.158
+# The subdomain web-01 is a  record and points to 100.25.177.26
+# The subdomain web-02 is a  record and points to 54.146.76.247
+# j
+
+# l
+# Output: The subdomain [SUB_DOMAIN] is a [RECORD_TYPE] record and points to [DESTINATION]
+# When only the parameter domain is provided, display information for its subdomains www, lb-01, web-01 and web-02 - in this specific order
+# When passing domain and subdomain parameters, display information for the specified subdomain
