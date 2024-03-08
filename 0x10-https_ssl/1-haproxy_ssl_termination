@@ -34,14 +34,14 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 
-frontend www-http
+frontend main
     bind *:80
-    bind *:443 ssl crt  /etc/letsencrypt/live/magret.tech/magret.pem
-    redirect scheme https code 301 if !{ ssl_fc }
+    bind *:443 ssl crt /etc/letsencrypt/live/magret.tech/fullchain.pem
     mode http
-    default_backend www-backend
+    redirect scheme https code 301 if !{ ssl_fc }
+    default_backend webservers
 
-backend www-backend
+backend webservers
     balance roundrobin
     server 412701-web-01 100.25.177.26:80 check
     server 412701-web-02 54.146.76.247:80 check
