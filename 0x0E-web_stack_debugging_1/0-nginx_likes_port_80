@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Script to debug my Ubuntu Container Nginx installation from listening on port 80
-command -v nginx
-sudo apt-get update
-sudo apt-get install nginx
-sudo service nginx status
+# command -v nginx
+# sudo apt-get update
+# sudo apt-get install nginx
+# sudo service nginx status
 # cp -r /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-sudo service nginx start
+# sudo service nginx start
+sed -i 's/[0-9]\+ default_server/80 default_server/' /etc/nginx/sites-enabled/default
+service nginx restart
