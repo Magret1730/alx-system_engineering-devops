@@ -1,0 +1,23 @@
+# Check UFW Status
+sudo ufw status
+
+# Update packages
+sudo apt-get update
+
+# install Uncomplicated Firewall(UFW)
+sudo apt-get install ufw
+
+# Set Default Policies
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Allow traffic on the specified ports
+sudo ufw allow ssh/tcp
+sudo ufw allow http/tcp
+sudo ufw allow https/tcp
+
+# Enable UFW to apply the rules
+sudo ufw enable
+
+# verify the rules that have been applied
+sudo ufw status
