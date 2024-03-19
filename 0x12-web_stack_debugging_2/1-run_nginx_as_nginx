@@ -2,9 +2,9 @@
 # Script that makes Nginx run as the nginx user.
 
 sed -i 's/^user.*/user nginx;/g' /etc/nginx/nginx.conf
-sed -i 's/^    listen 80;/    listen 8080;/g' /etc/nginx/sites-available/default
+# sed -i 's/^    listen 80;/    listen 8080;/g' /etc/nginx/sites-available/default
+# sed -i '/listen [::]:80;/a\t\tlisten 8080 default_server;\n\tlisten [::]:8080 default_server;' /etc/nginx/sites-available/default
+#sed -i '/^\s*listen\s*[::]:80;/a \ \ listen 8080 default_server;\n\ \ listen [::]:8080 default_server;' /etc/nginx/sites-available/default
+sed -i '/^\s*server\s*{.*/a \\tlisten 8080 default_server;\n\tlisten [::]:8080 default_server;\n' /etc/nginx/sites-available/default
 chmod 644 /etc/nginx/nginx.conf
-pkill apache2 || true
-
-# Restart Nginx
 /etc/init.d/nginx restart || nginx -s reload
