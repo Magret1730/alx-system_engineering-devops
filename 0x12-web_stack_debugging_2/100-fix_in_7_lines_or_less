@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Script that makes Nginx run as the nginx user
-# /etc/init.d/nginx stop
+# Script that makes Nginx run as the nginx user.
 sed -i 's/^user.*/user nginx;/g' /etc/nginx/nginx.conf
 sed -i '/^\s*server\s*{.*/a \\tlisten 8080 default_server;\n\tlisten [::]:8080 default_server;\n' /etc/nginx/sites-available/default
 sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 chmod 644 /etc/nginx/nginx.conf
-/etc/init.d/nginx restart
+/etc/init.d/nginx restart || nginx -s reload
