@@ -15,10 +15,10 @@ def export_to_csv(user_id):
     response = requests.get(url + '{}/todos'.format(user_id))
     todos = response.json()
 
-    # Getting employee name
+    # Getting user name
     user_response = requests.get(url + '{}'.format(user_id))
     user_data = user_response.json()
-    username = user_data['name']
+    username = user_data['username']
 
     # Calculating progress
     total_tasks = len(todos)
