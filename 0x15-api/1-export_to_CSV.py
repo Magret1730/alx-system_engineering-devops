@@ -8,32 +8,35 @@ import sys
 
 
 def export_to_csv(user_id):
-    # URL
-    url = f'https://jsonplaceholder.typicode.com/users/{user_id}/todos'
+    # url
+    url = 'https://jsonplaceholder.typicode.com/users/'
 
     # Fetching data from API
-    response = requests.get(url)
+    response = requests.get(url + '{}/todos'.format(user_id))
     todos = response.json()
 
-    # Getting employee data
-    user_url = f'https://jsonplaceholder.typicode.com/users/{user_id}'
-    user_response = requests.get(user_url)
+    # Getting employee name
+    user_response = requests.get(url + '{}'.format(user_id))
     user_data = user_response.json()
-    username = user_data['username']
+    username = user_data['name']
 
-    # Writing data to CSV file
-    filename = f'{user_id}.csv'
+    # Calculating progress
+    total_tasks = len(todos)
+    completed_tasks = sum(todo['completed'] for todo in todos)
+
+    # Writing data to csv file
+    filename = '{}.csv'.format(user_id)
     with open(filename, 'w', newline='') as csv_file:
-        writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
         for todo in todos:
-            writer.writerow([user_id, username, todo['completed'],
-                            todo['title']])
+            csv_file.write('"{}","{}","{}","{}"\n'
+                           .format(user_id, username, todo.get('completed'),
+                                   todo.get('title')))
 
 
 if __name__ == '__main__':
     # Gets user ID
     if len(sys.argv) != 2:
-        print("Usage: python3 {}  <user_id>".format(sys.argv[0]))
+        print("Usage: python3 {}  <employee_id>".format(sys.argv[0]))
         sys.exit(1)
 
     user_id = int(sys.argv[1])
