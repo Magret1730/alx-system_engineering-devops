@@ -39,4 +39,4 @@ if __name__ == '__main__':
     # display the title of completed tasks
     for todo in todos:
         if todo['completed']:
-            print('\t {}'.format(todo["title"]))
+            print('\t{}'.format(todo["title"]))
