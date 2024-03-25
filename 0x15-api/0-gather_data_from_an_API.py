@@ -26,7 +26,7 @@ def main(employee_id):
     completed_tasks = sum(todo['completed'] for todo in todos)
 
     # Displaying progress
-    print('Employee {} is done with tasks({}/{})'
+    print('Employee {} is done with tasks({}/{}):'
           .format(employee_name, completed_tasks, total_tasks))
 
     # display the title of completed tasks
