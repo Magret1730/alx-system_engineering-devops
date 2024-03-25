@@ -8,16 +8,9 @@ import requests
 import sys
 
 
-if __name__ == '__main__':
+def main(employee_id):
     # url
     url = 'https://jsonplaceholder.typicode.com/users/'
-
-    # Gets employee ID
-    if len(sys.argv) != 2:
-        print("Usage: python3 {}  <employee_id>".format(sys.argv[0]))
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
 
     # Fetching data from API
     response = requests.get(url + '{}/todos'.format(employee_id))
@@ -39,4 +32,15 @@ if __name__ == '__main__':
     # display the title of completed tasks
     for todo in todos:
         if todo['completed']:
-            print('\t{}'.format(todo["title"]))
+            print('\t {}'.format(todo["title"]))
+
+
+if __name__ == '__main__':
+    # Gets employee ID
+    if len(sys.argv) != 2:
+        print("Usage: python3 {}  <employee_id>".format(sys.argv[0]))
+        sys.exit(1)
+
+    employee_id = int(sys.argv[1])
+
+    main(employee_id)
