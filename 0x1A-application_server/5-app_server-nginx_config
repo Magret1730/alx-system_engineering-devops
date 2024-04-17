@@ -1,0 +1,45 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name _;
+
+        root /var/www/html;
+
+        add_header X-Served-By $hostname;
+
+        error_page 404 /custom_404.html;
+
+        # configuring Nginx to serve from the route /airbnb-onepage/
+        location /airbnb-onepage/ {
+                include proxy_params;
+                proxy_pass http://localhost:5000/airbnb-onepage/;
+        }
+
+        # configure Nginx to proxy HTTP requests to the route
+        # /airbnb-dynamic/number_odd_or_even/(any integer) to
+        # a Gunicorn instance listening on port 5001
+        location /airbnb-dynamic/number_odd_or_even/ {
+                rewrite ^/airbnb-dynamic/number_odd_or_even/(\d+)$ /number_odd_or_even/$1 break;
+                include proxy_params;
+                proxy_pass http://localhost:5001;
+        }
+
+        # route /api/ points to a Gunicorn instance listening on port 5002
+        location /api/ {
+                include proxy_params;
+                proxy_pass http://localhost:5002;
+        }
+
+        # gunicorn serves / route
+        location / {
+                include proxy_params;
+                proxy_pass http://localhost:5003/2-hbnb;
+                # try_files $uri $uri/ =404;
+        }
+
+        # gunicorn serves static contents
+        location /static/ {
+                alias /home/ubuntu/AirBnb_clone_v4/web_dynamic/static/;
+        }
+}
